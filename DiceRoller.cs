@@ -1,6 +1,6 @@
-﻿namespace DiceRolePrototype {
+﻿namespace DiceRollPrototype {
     public class DiceRoller {
-        int[] SpecRules = new int[] {
+        readonly int[] SpecRules = new int[] {
             1, // Normal
             2, // Homing / Sustained
             3, // Fusillade / Sustained + Homing
@@ -35,25 +35,28 @@
             for (int i = 0; i <= Dice.Count; i++) {
                 switch (i) {
                     case 1:
+                        //check for Sustained / Homing or Fusillade
+                        //Also check for Sustained + Homing
                         if (specrule == 2  || specrule == 3) {
-                            AllHits(i, RoundNumber(Dice, i));
+                            AllHits(i, RoundNumber(Dice, i), specrule);
                         }
                         break;
                     case 2:
+                        //Check for Fusillade or Sustained + Homing
                         if (specrule == 3) {
-                            AllHits(i, RoundNumber(Dice, i));
+                            AllHits(i, RoundNumber(Dice, i), specrule);
                         }
                         break;
                     case 3: 
                         break;
                     case 4:
-                        AllHits(i, RoundNumber(Dice, i));
+                        AllHits(i, RoundNumber(Dice, i), specrule);
                         break;
                     case 5:
-                        AllHits(i, RoundNumber(Dice, i));
+                        AllHits(i, RoundNumber(Dice, i), specrule);
                         break;
                     case 6:
-                        AllHits(i, RoundNumber(Dice, i));
+                        AllHits(i, RoundNumber(Dice, i), specrule);
                         break;
                 }
             }
@@ -66,16 +69,21 @@
             return HitStore;
         }
 
-        private void AllHits(int i, float HitNum) {
+        private void AllHits(int i, float HitNum, int specrule) {
             //if key is a heavy hit/exploding, double result
             if (i >= 5) { HitNum += HitNum; }
             //if key is exploding hit, call ExDice method  
-            if (i == 6) { ReRolls(10, HitNum); }
+            if (i == 6 && specrule == 4) {
+                //  ReRolls(10, HitNum, specrule);
+                HitNum += HitNum;
+            } else if (i == 6) {
+                ReRolls(10, HitNum, specrule);
+            }
             DiceList.Add(HitNum);
         }
 
-        // Exploding Dice with depth variable
-        private void ReRolls(int depth, float HitNum) {
+            // Exploding Dice with depth variable
+            private void ReRolls(int depth, float HitNum, int specrule) {
             float ReDice = 0;
             //loop to interate equal to depth
             for (int i = 0; i < depth; i++) {
@@ -89,7 +97,11 @@
                 //inserts results into correct position in list, with heavy/explodings being doubled
                 DiceList.Insert(0, ReDice);
                 DiceList.Insert(1, ReDice * 2);
-                DiceList.Insert(2, ReDice * 2);
+                if (specrule == 4) {
+                    DiceList.Insert(2, ReDice * 3);
+                } else {
+                    DiceList.Insert(2, ReDice * 2);
+                }
             }
         }
 
