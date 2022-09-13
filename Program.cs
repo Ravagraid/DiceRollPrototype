@@ -2,14 +2,21 @@
 DiceRollPrototype.DiceRoller d = new();
 DiceRollPrototype.DicePool dicepool = new DiceRollPrototype.DicePool();
 
-dicepool.RollPool(10, 1);
-foreach (var item in dicepool.Results)
-    Console.WriteLine("You have rolled {0} {1}'s", item.Value, item.Key);
+string[] ResultName = new string[] { "Blanks", "Counters", "Heavy Counters", "Hits", "Heavy Hits", "Exploding Hits" };
 
-Console.WriteLine("");
-Console.WriteLine($"Single Hits: {dicepool.SingleHits}");
-Console.WriteLine($"Heavy Hits: {dicepool.HeavyHits}");
-Console.WriteLine($"Exploding Hits: {dicepool.ExplodingHits}");
+dicepool.RollPool(10, 1);
+PrintResults();
+//Console.WriteLine("");
+//Console.WriteLine($"Single Hits: {dicepool.SingleHits}");
+//Console.WriteLine($"Heavy Hits: {dicepool.HeavyHits}");
+//Console.WriteLine($"Exploding Hits: {dicepool.ExplodingHits}");
+//Console.WriteLine($"Total Hits: {dicepool.TotalHits}");
+
+void PrintResults() {
+    foreach (var item in dicepool.Results) {
+        Console.WriteLine($"{ResultName[(int)item.Key - 1]}: {item.Value}");
+    }
+}
 //Console.WriteLine("Enter the number of dice:");
 //int num = Convert.ToInt16(Console.ReadLine());
 //Console.WriteLine($"Normal Hits:    {Indent(11)}{d.Roll(num,1)}");
