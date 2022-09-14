@@ -1,10 +1,8 @@
 ﻿// See https://aka.ms/new-console-template for more information
-DiceRollPrototype.DiceRoller d = new();
-DiceRollPrototype.DicePool dicepool = new DiceRollPrototype.DicePool();
-
-string[] ResultName = new string[] { "Blanks", "Counters", "Heavy Counters", "Hits", "Heavy Hits", "Exploding Hits" };
-
-dicepool.RollPool(10, 1);
+DiceRollPrototype.DicePool d = new();
+Console.WriteLine("Please enter the number of dice:");
+int dicenum = Convert.ToInt16(Console.ReadLine());
+d.RollPool(dicenum, 1);
 PrintResults();
 //Console.WriteLine("");
 //Console.WriteLine($"Single Hits: {dicepool.SingleHits}");
@@ -13,8 +11,13 @@ PrintResults();
 //Console.WriteLine($"Total Hits: {dicepool.TotalHits}");
 
 void PrintResults() {
-    foreach (var item in dicepool.Results) {
-        Console.WriteLine($"{ResultName[(int)item.Key - 1]}: {item.Value}");
+    string[] ResultName = new string[] {"Blanks", "Counters", "Heavy Counters", 
+                                        "Hits", "Heavy Hits", "Exploding Hits" };
+    foreach (var item in d.Results) {
+        Console.WriteLine($"{ResultName[(int)item.Key - 1] + ":",-18}{item.Value}");
+        if (item.Key == 6) { 
+            Console.WriteLine($"\nTotal Hits: {d.TotalHits, 7}");
+        }
     }
 }
 //Console.WriteLine("Enter the number of dice:");
@@ -24,11 +27,6 @@ void PrintResults() {
 //Console.WriteLine($"With Fusillade: {Indent(11)}{d.Roll(num,3)}");
 //Console.WriteLine($"Devastating: {Indent(14)}{d.Roll(num, 4)}");
 //Console.WriteLine("Press any key to close the program.");
-//Console.ReadKey();
-
-//static string Indent(int count) {
-//    return "".PadLeft(count);
-//}
 //Notes: Need to account for the following scenarios
 //NORMAL: 10.005729  - Done
 //SUSTAINED / HOMING: 11.663932 - Done
