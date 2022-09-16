@@ -1,16 +1,17 @@
 ﻿namespace DiceRollPrototype {
-    internal class DicePool : Dice {
-        public Dictionary<int,int> Results;
-        public Dictionary<int,int> ExResults;
-        public int Blanks => Results[1];
-        public int Counters => Results[2];
-        public int HeavyCounters => Results[3];
-        public int SingleHits => Results[4] + ExResults[4];
-        public int HeavyHits => Results[5] + ExResults[5];
-        public int ExplodingHits => Results[6] + ExResults[6];
-        public int TotalHits => SingleHits + (HeavyHits * 2) + (ExplodingHits * 2);
-
+    internal class DicePool : SpecialRules {
+        internal Dictionary<int,int> Results;
+        internal Dictionary<int,int> ExResults;
+        internal int Blanks => Results[1];
+        internal int Counters => Results[2];
+        internal int HeavyCounters => Results[3];
+        internal int SingleHits => Results[4] + ExResults[4];
+        internal int HeavyHits => Results[5] + ExResults[5];
+        internal int ExplodingHits => Results[6] + ExResults[6];
+        internal int TotalHits => SingleHits + (HeavyHits * 2) + (ExplodingHits * 2);
+        private Random r;
         public DicePool() {
+            r = new Random();
             //Initialise and populate the directory
             Results = new Dictionary<int,int>();
             ExResults = new Dictionary<int,int>();
@@ -18,6 +19,10 @@
                 Results.Add(i,0);
                 ExResults.Add(i,0);
             }
+        }
+
+        private int Roll() {
+            return r.Next(1,7);
         }
 
         //Roll the number of dice a number of times, adding each result to Dictionary
@@ -32,7 +37,7 @@
 
         //Attempt at Exploding Dice. Probably wrong.
         //Copy of dice rolling function without extra for loop.
-        public void ExDiceRoll(int NumDice) {
+        private void ExDiceRoll(int NumDice) {
             if (NumDice == 0) { return; } else {
                 for (int i = 0; i < NumDice; i++) {
                     int temp = Roll();

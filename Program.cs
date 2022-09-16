@@ -1,6 +1,5 @@
 ﻿// See https://aka.ms/new-console-template for more information
 DiceRollPrototype.DicePool d = new();
-
 Console.WriteLine("Please enter the number of dice:");
 int dicenum = Convert.ToInt16(Console.ReadLine());
 d.RollPool(dicenum,1);
@@ -22,6 +21,7 @@ void PrintResults() {
             }
             //Display total hits
             Console.WriteLine($"\nTotal Hits: {d.TotalHits,7}");
+            Console.WriteLine(d.Sustained(d.Results));
         }
     }
 }
