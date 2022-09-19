@@ -1,7 +1,6 @@
 ﻿namespace DiceRollPrototype {
-    internal class DicePool : SpecialRules {
-        internal Dictionary<int,int> Results;
-        internal Dictionary<int,int> ExResults;
+    internal class DicePool {
+        internal Dictionary<int,int> Results, ExResults;
         internal int Blanks => Results[1];
         internal int Counters => Results[2];
         internal int HeavyCounters => Results[3];
@@ -26,25 +25,32 @@
         }
 
         //Roll the number of dice a number of times, adding each result to Dictionary
-        public void RollPool(int NumDice,int NumRoll) {
+        public void ReRollPool(int NumDice,int NumRoll) {
             for (int i = 0; i < NumDice; i++) {
                 for (int j = 0; j < NumRoll; j++) {
-                    Results[Roll()]++;
+                    ExResults[Roll()]++;
                 }
             }
-            ExDiceRoll(Results[6]);
+        }
+        //For modifier use, to store the result for display
+        public void ReRollPool(int NumDice, int NumRoll, Dictionary<int,int> dict) {
+            for (int i = 0; i < NumDice; i++) {
+                for (int j = 0; j < NumRoll; j++) {
+                    ExResults[Roll()]++;
+                    dict[Roll()]++;
+                }
+            }
         }
 
         //Attempt at Exploding Dice. Probably wrong.
         //Copy of dice rolling function without extra for loop.
-        private void ExDiceRoll(int NumDice) {
+        internal void RollPool(int NumDice) {
             if (NumDice == 0) { return; } else {
                 for (int i = 0; i < NumDice; i++) {
-                    int temp = Roll();
-                    Results[temp]++;
-                    ExResults[temp]++;
+                    Results[Roll()]++;
                 }
             }
+            ReRollPool(Results[6],4);
         }
     }
 }
